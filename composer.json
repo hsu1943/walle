@@ -1,0 +1,20 @@
+{
+  "name": "ducksoft/walle",
+  "description": "simple framework",
+  "type": "project",
+  "lisence": "MIT",
+  "require": {
+    "php": ">=7.1.0",
+    "swiftmailer/swiftmailer": "6.0"
+  },
+  "authors": [
+    {
+      "name": "hsu1943"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Walle\\": "./src"
+    }
+  }
+}
