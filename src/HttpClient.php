@@ -104,17 +104,17 @@ class HttpClient
 
         if (!curl_errno($this->ch)) {
             list($response_header, $response_body) = explode("\r\n\r\n", $result, 2);
-            App::$app->log->add(PHP_EOL . "Request Headers: " . json_encode($response_header, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL);
+            Walle::$app->log->add(PHP_EOL . "Request Headers: " . json_encode($response_header, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL);
             // $this->log("Request Headers: " . $response_header);
             // $this->log("Request Body :" . json_encode($response_body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL);
-            App::$app->log->add("Request Body :" . (Log::is_json($response_body) ? json_encode(json_decode($response_body), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : json_encode($response_body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) . PHP_EOL);
+            Walle::$app->log->add("Request Body :" . (Log::is_json($response_body) ? json_encode(json_decode($response_body), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : json_encode($response_body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) . PHP_EOL);
             $contentType = curl_getinfo($this->ch, CURLINFO_CONTENT_TYPE);
 
             $info = curl_getinfo($this->ch);
-            App::$app->log->add('耗时 ' . $info['total_time'] . ' Seconds 发送请求到 ' . $info['url'] . PHP_EOL);
+            Walle::$app->log->add('耗时 ' . $info['total_time'] . ' Seconds 发送请求到 ' . $info['url'] . PHP_EOL);
             $response = ['code' => 0, 'msg' => 'OK', 'data' => $response_body, 'contentType' => $contentType];
         } else {
-            App::$app->log->add('Curl error: ' . curl_error($this->ch) . PHP_EOL);
+            Walle::$app->log->add('Curl error: ' . curl_error($this->ch) . PHP_EOL);
             $response = ['code' => -1, 'msg' => "请求 $url 出错: Curl error: " . curl_error($this->ch)];
         }
         curl_close($this->ch);

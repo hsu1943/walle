@@ -2,7 +2,7 @@
 
 namespace Walle;
 
-class App
+class Walle
 {
     public $config;
     public $db;
@@ -30,8 +30,8 @@ class App
 
     public static function getInstance($config)
     {
-        if (!(self::$app instanceof App)) {
-            self::$app = new App($config);
+        if (!(self::$app instanceof Walle)) {
+            self::$app = new Walle($config);
         }
         return self::$app;
     }

@@ -2,11 +2,11 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Walle\App;
+use Walle\Walle;
 
 $config = require __DIR__ . '/config-test.php';
-App::getInstance($config);
+Walle::getInstance($config);
 
-App::$app->log->add(date('Y-m-d H:i:s') . 'log add test' . PHP_EOL);
-App::$app->cache->set('testkey', 'test cache content', 10);
-var_dump(App::$app->cache->get('testkey'));
+Walle::$app->log->add(date('Y-m-d H:i:s') . 'log add test' . PHP_EOL);
+Walle::$app->cache->set('testkey', 'test cache content', 10);
+var_dump(Walle::$app->cache->get('testkey'));
