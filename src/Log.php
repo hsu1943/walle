@@ -16,7 +16,7 @@ class Log
     function __construct($path)
     {
         if (empty($path)) {
-            $path = __DIR__ . '/runtime/log/';
+            throw new \ErrorException('can\'t find the "path" of log in "main.php"');
         }
         if (!is_dir($path)) {
             @mkdir($path, 0777, true);

@@ -16,8 +16,11 @@ class Cache
 
     function __construct($config)
     {
-        if (empty($config['path'])) {
-            $config['path'] = __DIR__ . '/runtime/cache/';
+        if (!isset($config['path']) || empty($config['path'])) {
+            throw new \ErrorException('can\'t find the "path" of cache in "main.php"');
+        }
+        if (!isset($config['key']) || empty($config['key'])) {
+            throw new \ErrorException('can\'t find the "key" of cache in "main.php"');
         }
         if (!is_dir($config['path'])) {
             @mkdir($config['path'], 0777, true);
@@ -43,9 +46,13 @@ class Cache
         $str = file_get_contents($filepath);
         $data = unserialize($str);
         if ($data[1] == 0 || (time() < ($data[1] + $data[2]))) {
-            return $data[0];
+            // 未过期或永不过期
+            $value = empty($data[0]) ? '' : json_decode($data[0], true);
+            return $value;
         }
-        unlink($filepath);
+        if (file_exists($filepath)) {
+            unlink($filepath);
+        }
         return false;
     }
 
@@ -53,21 +60,27 @@ class Cache
      * 设置缓存
      * @param $key string
      * @param $value string
-     * @param int $expire 过期时间单位（s）
+     * @param int $expire 过期时间单位（s）默认0永不过期
      * @return bool
      */
     public function set($key, $value, $expire = 0)
     {
-        if (!$key || !is_string($value) || !is_int($expire)) {
-            return false;
-        }
         $keydata = $this->getMd5Key($key);
         $fileKey = $keydata[0];
         $subDir = $keydata[1];
-        $dataStr = serialize([$value, $expire, time()]);
+        // var_dump($keydata);die();
         $path = $this->path . $subDir;
+        if ($value === null && file_exists($path . '/' . $fileKey)) {
+            unlink($path . '/' . $fileKey);
+            return true;
+        }
+        $value = empty($value) ? '' : json_encode($value, 320);
+        if (!$key || !is_string($value) || !is_int($expire)) {
+            return false;
+        }
+        $dataStr = serialize([$value, $expire, time()]);
         if (!is_dir($path)) {
-            @mkdir($path, 0777, true);
+            mkdir($path, 0777, true);
         }
         file_put_contents($path . '/' . $fileKey, $dataStr);
         return true;
