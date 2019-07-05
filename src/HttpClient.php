@@ -104,10 +104,10 @@ class HttpClient
 
         if (!curl_errno($this->ch)) {
             list($response_header, $response_body) = explode("\r\n\r\n", $result, 2);
-            Walle::$app->log->add(PHP_EOL . "Request Headers: " . json_encode($response_header, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL);
+            Walle::$app->log->add(PHP_EOL . "Request Headers: " . json_encode($response_header, 320) . PHP_EOL);
             // $this->log("Request Headers: " . $response_header);
             // $this->log("Request Body :" . json_encode($response_body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL);
-            Walle::$app->log->add("Request Body :" . (Log::is_json($response_body) ? json_encode(json_decode($response_body), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : json_encode($response_body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) . PHP_EOL);
+            Walle::$app->log->add("Request Body :" . (Log::is_json($response_body) ? json_encode(json_decode($response_body), 320) : json_encode($response_body, 320)) . PHP_EOL);
             $contentType = curl_getinfo($this->ch, CURLINFO_CONTENT_TYPE);
 
             $info = curl_getinfo($this->ch);

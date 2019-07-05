@@ -9,6 +9,8 @@
 
 namespace Walle;
 
+use PDO;
+
 class Db
 {
     public $conn;
@@ -25,15 +27,16 @@ class Db
     public function init()
     {
         if ($this->conn == null) {
+            $option = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC);
             try {
-                $this->conn = new \PDO(
+                $this->conn = new PDO(
                     "mysql:host={$this->config['host']}; dbname={$this->config['dbName']}; charset=UTF8MB4",
                     $this->config['user'],
-                    $this->config['pass']
+                    $this->config['pass'],
+                    $option
                 );
             } catch (\Exception $e) {
-                echo "Error!: " . $e->getMessage() . PHP_EOL;
-                $this->conn = null;
+                throw new \PDOException($e->getMessage());
             }
         }
         return $this->conn;

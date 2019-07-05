@@ -2,19 +2,26 @@
 
 namespace Walle;
 
+/**
+ * Class Walle
+ * @package Walle
+ * @property Db $db
+ * @property Cache $cache
+ * @property Log $log
+ * @property Walle $app
+ */
 class Walle
 {
     public $config;
     public $db;
     public $log;
     public $cache;
-    public static $app = null;
+    public static $app;
 
     function __construct($config)
     {
         $this->config = $config;
         $this->log = new Log($this->getConfig('log')['path']);
-        $this->db = new Db($this->getConfig('db'));
         $this->cache = new Cache($this->getConfig('cache'));
     }
 
@@ -34,6 +41,14 @@ class Walle
             self::$app = new Walle($config);
         }
         return self::$app;
+    }
+
+    public function initDb()
+    {
+        if($this->db == null) {
+            $this->db = new Db($this->getConfig('db'));
+        }
+        return $this->db;
     }
 
 }

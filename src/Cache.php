@@ -17,10 +17,10 @@ class Cache
     function __construct($config)
     {
         if (!isset($config['path']) || empty($config['path'])) {
-            throw new \ErrorException('can\'t find the "path" of cache in "main.php"');
+            throw new \ErrorException('can\'t find the "path" of cache in "config.php"');
         }
         if (!isset($config['key']) || empty($config['key'])) {
-            throw new \ErrorException('can\'t find the "key" of cache in "main.php"');
+            throw new \ErrorException('can\'t find the "key" of cache in "config.php"');
         }
         if (!is_dir($config['path'])) {
             @mkdir($config['path'], 0777, true);
@@ -36,9 +36,7 @@ class Cache
      */
     public function get($key)
     {
-        $keydata = $this->getMd5Key($key);
-        $fileKey = $keydata[0];
-        $subDir = $keydata[1];
+        list($fileKey, $subDir) = $this->getMd5Key($key);
         $filepath = $this->path . $subDir . '/' . $fileKey;
         if (!file_exists($filepath)) {
             return false;
@@ -65,10 +63,7 @@ class Cache
      */
     public function set($key, $value, $expire = 0)
     {
-        $keydata = $this->getMd5Key($key);
-        $fileKey = $keydata[0];
-        $subDir = $keydata[1];
-        // var_dump($keydata);die();
+        list($fileKey, $subDir) = $this->getMd5Key($key);
         $path = $this->path . $subDir;
         if ($value === null && file_exists($path . '/' . $fileKey)) {
             unlink($path . '/' . $fileKey);
