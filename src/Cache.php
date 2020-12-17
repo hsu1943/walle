@@ -37,19 +37,19 @@ class Cache
     public function get($key)
     {
         list($fileKey, $subDir) = $this->getMd5Key($key);
-        $filepath = $this->path . $subDir . '/' . $fileKey;
-        if (!file_exists($filepath)) {
+        $filePath = $this->path . $subDir . '/' . $fileKey;
+        if (!file_exists($filePath)) {
             return false;
         }
-        $str = file_get_contents($filepath);
+        $str = file_get_contents($filePath);
         $data = unserialize($str);
         if ($data[1] == 0 || (time() < ($data[1] + $data[2]))) {
             // 未过期或永不过期
             $value = empty($data[0]) ? '' : json_decode($data[0], true);
             return $value;
         }
-        if (file_exists($filepath)) {
-            unlink($filepath);
+        if (file_exists($filePath)) {
+            unlink($filePath);
         }
         return false;
     }

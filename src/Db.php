@@ -19,7 +19,7 @@ class Db
     function __construct($config)
     {
         if (empty($config['host']) || empty($config['user']) || empty($config['dbName']) || empty($config['pass'])) {
-            throw new \ErrorException('参数错误');
+            throw new \ErrorException('db parameter error');
         }
         $this->config = $config;
     }
